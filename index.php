@@ -76,25 +76,71 @@ $_SESSION['ref_script']=$currentPage;
 
 
 	<tr>
-	<td class='searchRow'><label for='searchResourceISBNOrISSN'><b>ISBN/ISSN</b></label>
+	<td class='searchRow'><label for='searchOrderNumber'><b>Order Number</b></label>
 	<br />
-	<?php echo Html::text_search_field_tag('resourceISBNOrISSN', $search['resourceISBNOrISSN']); ?>
+	<?php echo Html::text_search_field_tag('orderNumber', $search['orderNumber']); ?>
 	<br />
-	<div id='div_searchISBNOrISSN' style='<?php if (!$search['resourceISBNOrISSN']) echo "display:none;"; ?>margin-left:123px;'><input type='button' name='btn_searchResourceISBNOrISSN' value='go!' class='searchButton' /></div>
+	<div id='div_searchOrderNumber' style='<?php if (!$search['orderNumber']) echo "display:none;"; ?>margin-left:123px;'><input type='button' name='btn_searchOrderNumber' value='go!' class='searchButton' /></div>
 	</td>
 	</tr>
 
+        <tr>
+        <td class='searchRow'><label for='searchResourceISBNOrISSN'><b>ISBN / ISSN</b></label>
+        <br />
+        <?php echo Html::text_search_field_tag('resourceISBNOrISSN', $search['resourceISBNOrISSN']); ?>
+        <br />
+        <div id='div_searchISBNOrISSN' style='<?php if (!$search['resourceISBNOrISSN']) echo "display:none;"; ?>margin-left:123px;'><input type='button' name='btn_searchResourceISBNOrISSN' value='go!' class='searchButton' /></div>
+        </td>
+        </tr>
 
+        <tr>
+        <td class='searchRow'><label for='searchFund'><b>Fund</b></label>
+        <br />
+        <?php echo Html::text_search_field_tag('fund', $search['fund']); ?><br />
+        <div id='div_searchFund' style='<?php if (!$search['fund']) echo "display:none;"; ?>margin-left:123px;'><input type='button' name='btn_searchFund' value='go!' class='searchButton' /></div>
+        </td>
+        </tr>
 
-	<tr>
-	<td class='searchRow'><label for='searchFund'><b>Fund</b></label>
-	<br />
-	<?php echo Html::text_search_field_tag('fund', $search['fund']); ?><br />
-	<div id='div_searchFund' style='<?php if (!$search['fund']) echo "display:none;"; ?>margin-left:123px;'><input type='button' name='btn_searchFund' value='go!' class='searchButton' /></div>
-	</td>
-	</tr>
+        <tr>
+        <td class='searchRow'><label for='searchPaymentYear'><b>Payment Year</b></label>
+        <br />
+        <?php echo Html::text_search_field_tag('paymentYear', $search['paymentYear']); ?>
+        <br />
+        <div id='div_searchPaymentYear' style='<?php if (!$search['paymentYear']) echo "display:none;"; ?>margin-left:123px;'><input type='button' name='btn_searchPaymentYear' value='go!' class='searchButton' /></div>
+        </td>
+        </tr>
 
+        <tr>
+        <td class='searchRow'><label for='searchPaymentDetail'><b>Payment Details</b></label>
+        <br />
+        <?php echo Html::text_search_field_tag('paymentDetail', $search['paymentDetail']); ?>
+        <br />
+        <div id='div_searchPaymentDetail' style='<?php if (!$search['paymentDetail']) echo "display:none;"; ?>margin-left:123px;'><input type='button' name='btn_searchPaymentDetail' value='go!' class='searchButton' /></div>
+        </td>
+        </tr>
 
+        <tr>
+        <td class='searchRow'><label for='searchOrderTypeID'><b>Payment Type</b></label>
+        <br />
+        <select name='search[orderTypeID]' id='searchOrderTypeID' style='width:150px'>
+        <option value=''>All</option>
+        <?php
+
+                $display = array();
+                $orderType = new OrderType();
+
+                foreach($orderType->allAsArray() as $display) {
+                        if ($search['orderTypeID'] == $display['orderTypeID']) {
+                                echo "<option value='" . $display['orderTypeID'] . "' selected>" . $display['shortName'] . "</option>";
+                        }else{
+                                echo "<option value='" . $display['orderTypeID'] . "'>" . $display['shortName'] . "</option>";
+                        }
+                }
+
+        ?>
+        </select>
+        </td>
+        </tr>
 
 	<tr>
 	<td class='searchRow'><label for='searchAcquisitionTypeID'><b>Acquisition Type</b></label>
@@ -144,43 +190,6 @@ $_SESSION['ref_script']=$currentPage;
 	</select>
 	</td>
 	</tr>
-
-
-
-
-
-
-	<tr>
-	<td class='searchRow'><label for='searchCreatorLoginID'><b>Creator</b></label>
-	<br />
-	<select name='search[creatorLoginID]' id='searchCreatorLoginID' style='width:150px'>
-	<option value=''>All</option>
-
-	<?php
-
-		$display = array();
-		$resource = new Resource();
-
-		foreach($resource->getCreatorsArray() as $display) {
-			if ($display['firstName']){
-				$name = $display['lastName'] . ", " . $display['firstName'];
-			}else{
-				$name = $display['loginID'];
-			}
-
-			if ($search['creatorLoginID'] == $display['loginID']){
-				echo "<option value='" . $display['loginID'] . "' selected>" . $name . "</option>";
-			}else{
-				echo "<option value='" . $display['loginID'] . "'>" . $name . "</option>";
-			}
-		}
-
-	?>
-	</select>
-	</td>
-	</tr>
-
-
 
 	<tr>
 	<td class='searchRow'><label for='searchResourceFormatID'><b>Resource Format</b></label>
@@ -247,6 +256,7 @@ $_SESSION['ref_script']=$currentPage;
 	</td>
 	</tr>
 
+<?php /* commented out the General Subject and the Detailed Subject fields
 	<tr>
 	<td class='searchRow'><label for='searchGeneralSubjectID'><b>General Subject</b></label>
 	<br />
@@ -308,6 +318,7 @@ $_SESSION['ref_script']=$currentPage;
 	</select>
 	</td>
 	</tr>
+*/ ?>
 	
 	<tr>
 	<td class='searchRow'><label for='searchFirstLetter'><b>Starts with</b></label>
@@ -396,7 +407,97 @@ $_SESSION['ref_script']=$currentPage;
 	</td>
 	</tr>
 
+        <tr>
+        <td class='searchRow'><label for='searchCreatorLoginID'><b>Creator</b></label>
+        <br />
+        <select name='search[creatorLoginID]' id='searchCreatorLoginID' style='width:150px'>
+        <option value=''>All</option>
 
+        <?php
+
+                $display = array();
+                $resource = new Resource();
+
+                foreach($resource->getCreatorsArray() as $display) {
+                        if ($display['firstName']){
+                                $name = $display['lastName'] . ", " . $display['firstName'];
+                        }else{
+                                $name = $display['loginID'];
+                        }
+
+                        if ($search['creatorLoginID'] == $display['loginID']){
+                                echo "<option value='" . $display['loginID'] . "' selected>" . $name . "</option>";
+                        }else{
+                                echo "<option value='" . $display['loginID'] . "'>" . $name . "</option>";
+                        }
+                }
+
+        ?>
+        </select>
+        </td>
+        </tr>
+
+        <tr>
+        <td class='searchRow'><label for='searchGeneralSubjectID'><b>General Subject</b></label>
+        <br />
+        <select name='search[generalSubjectID]' id='searchGeneralSubjectID' style='width:150px'>
+        <option value=''>All</option>
+
+        <?php
+
+                if ($search['generalSubjectID'] == "none"){
+                        echo "<option value='none' selected>(none)</option>";
+                }else{
+                        echo "<option value='none'>(none)</option>";
+                }
+
+
+                $display = array();
+                $generalSubject = new GeneralSubject();
+
+                foreach($generalSubject->allAsArray() as $display) {
+                        if ($search['generalSubjectID'] == $display['generalSubjectID']){
+                                echo "<option value='" . $display['generalSubjectID'] . "' selected>" . $display['shortName'] . "</option>";
+                        }else{
+                                echo "<option value='" . $display['generalSubjectID'] . "'>" . $display['shortName'] . "</option>";
+                        }
+                }
+
+        ?>
+        </select>
+        </td>
+        </tr>
+
+        <tr>
+        <td class='searchRow'><label for='searchDetailedSubjectID'><b>Detailed Subject</b></label>
+        <br />
+        <select name='search[detailedSubjectID]' id='searchDetailedSubjectID' style='width:150px'>
+        <option value=''>All</option>
+
+        <?php
+
+                if ($search['detailedSubjectID'] == "none"){
+                        echo "<option value='none' selected>(none)</option>";
+                }else{
+                        echo "<option value='none'>(none)</option>";
+                }
+
+
+                $display = array();
+                $detailedSubject = new DetailedSubject();
+
+                foreach($detailedSubject->allAsArray() as $display) {
+                        if ($search['detailedSubjectID'] == $display['detailedSubjectID']){
+                                echo "<option value='" . $display['detailedSubjectID'] . "' selected>" . $display['shortName'] . "</option>";
+                        }else{
+                                echo "<option value='" . $display['detailedSubjectID'] . "'>" . $display['shortName'] . "</option>";
+                        }
+                }
+
+        ?>
+        </select>
+        </td>
+        </tr>
 
 	<tr>
 	<td class='searchRow'><label for='searchPurchaseSiteID'><b>Purchase Site</b></label>

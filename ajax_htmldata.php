@@ -253,9 +253,9 @@ switch ($_GET['action']) {
 				foreach ($orgArray as $organization){
 					//if organizations is installed provide a link
 					if ($config->settings->organizationsModule == 'Y'){
-						echo "<span style='float:left; width:75px;'>" . $organization['organizationRole'] . ":</span><span style='width:270px;'>" . $organization['organization'] . "&nbsp;&nbsp;<a href='" . $util->getOrganizationURL() . $organization['organizationID'] . "' target='_blank'><img src='images/arrow-up-right.gif' alt='View " . $organization['organization'] . "' title='View " . $organization['organization'] . "' style='vertical-align:top;'></a></span><br />";
+						echo "<span style='float:left; width:95px;'>" . $organization['organizationRole'] . ":</span><span style='width:270px;'>" . $organization['organization'] . "<a href='" . $util->getOrganizationURL() . $organization['organizationID'] . "' target='_blank'><img src='images/arrow-up-right.gif' alt='View " . $organization['organization'] . "' title='View " . $organization['organization'] . "' style='vertical-align:top;'></a></span><br />";
 					}else{
-						echo "<span style='float:left; width:75px;'>" . $organization['organizationRole'] . ":</span><span style='width:270px;'>" . $organization['organization'] . "</span><br />";
+						echo "<span style='float:left; width:95px;'>" . $organization['organizationRole'] . ":</span><span style='width:270px;'>" . $organization['organization'] . "</span><br />";
 					}
 				}
 				?>
@@ -283,7 +283,7 @@ switch ($_GET['action']) {
 
 			if ($resource->descriptionText){ ?>
 				<tr>
-				<td style='vertical-align:top;width:115px;'>Description:</td>
+				<td style='vertical-align:top;width:115px;'>Notes:</td>
 				<td style='width:345px;'><?php echo nl2br($resource->descriptionText); ?></td>
 				</tr>
 			<?php } ?>
@@ -600,18 +600,40 @@ switch ($_GET['action']) {
 			</tr>
 			<?php } ?>
 
+                        <?php if (($resource->invoiceDate) && ($resource->invoiceDate != '0000-00-00')) { ?>
+                        <tr>
+                        <td style='vertical-align:top;width:110px;'>Invoice Date:</td>
+                        <td style='width:350px;'><?php echo format_date($resource->invoiceDate); ?>&nbsp;&nbsp;
+                        <?php if ($resource->invoiceAlertEnabledInd == "1") { echo "<i>Invoice Alert Enabled</i>"; } ?>
+                        </td>
+                        </tr>
+                        <?php } ?>
+
+
+
+
+
 			</table>
 			<br />
 
+
 			<table class='linedFormTable' style='width:460px;'>
 			<tr>
-			<th colspan='3'>Initial Cost</th>
+			<th colspan='5'>Payments</th>
 			</th>
 			</tr>
 
 			<?php
 			if (count($paymentArray) > 0){
 				foreach ($paymentArray as $payment){
+
+                                if ($payment['paymentYear']){
+                                        $paymentYr = $payment['paymentYear'];
+                                }else{
+                                        $paymentYr = "&nbsp;";
+                                }
+
+
 				if ($payment['fundName']){
 					$fund = $payment['fundName'];
 				}else{
@@ -625,11 +647,20 @@ switch ($_GET['action']) {
 				}
 
 
+                                if ($payment['paymentDetail']){
+                                        $paymentDet = $payment['paymentDetail'];
+                                }else{
+                                        $paymentDet = "&nbsp;";
+                                }
+
+
 				?>
 				<tr>
+                                <td><?php echo $paymentYr; ?></td>
 				<td><?php echo $fund; ?></td>
 				<td><?php echo $cost; ?></td>
 				<td><?php echo $payment['orderType']; ?></td>
+                                <td><?php echo $paymentDet; ?></td>
 				</tr>
 
 				<?php
@@ -641,7 +672,7 @@ switch ($_GET['action']) {
 
 			</table>
 			<?php if ($user->canEdit()){ ?>
-				<a href='ajax_forms.php?action=getOrderForm&height=462&width=783&modal=true&resourceID=<?php echo $resourceID; ?>' class='thickbox' id='newAlias'>edit acquisitions information</a>
+				<a href='ajax_forms.php?action=getOrderForm&height=585&width=950&modal=true&resourceID=<?php echo $resourceID; ?>' class='thickbox' id='newAlias'>edit acquisitions information</a>
 			<?php } ?>
 			<br />
 			<br />
@@ -1618,7 +1649,7 @@ switch ($_GET['action']) {
 		?>
 
 			<div style='background-color:white; width:219px; padding:7px;'>
-				<div class='rightPanelHeader'>Organizations Module</div>
+				<div class='rightPanelHeader'>Organizations</div>
 
 				<?php
 				foreach ($orgArray as $organization){
@@ -1634,7 +1665,7 @@ switch ($_GET['action']) {
 
 		?>
 			<div style='background-color:white; width:219px; padding:7px;'>
-				<div class='rightPanelHeader'>Licensing Module</div>
+				<div class='rightPanelHeader'>Licensing</div>
 
 				<?php
 				foreach ($licenseArray as $license){
@@ -1716,13 +1747,13 @@ switch ($_GET['action']) {
 
 		?>
 				<tr id='tr_<?php echo $resource['resourceID']; ?>'>
-					<td <?php echo $classAdd; ?>><a href='ajax_forms.php?action=getNewResourceForm&height=483&width=775&resourceID=<?php echo $resource['resourceID']; ?>&modal=true' class='thickbox'><?php echo $resource['resourceID']; ?></a></td>
-					<td <?php echo $classAdd; ?>><a href='ajax_forms.php?action=getNewResourceForm&height=483&width=775&resourceID=<?php echo $resource['resourceID']; ?>&modal=true' class='thickbox'><?php echo $resource['titleText']; ?></a></td>
+					<td <?php echo $classAdd; ?>><a href='ajax_forms.php?action=getNewResourceForm&height=483&width=942&resourceID=<?php echo $resource['resourceID']; ?>&modal=true' class='thickbox'><?php echo $resource['resourceID']; ?></a></td>
+					<td <?php echo $classAdd; ?>><a href='ajax_forms.php?action=getNewResourceForm&height=483&width=942&resourceID=<?php echo $resource['resourceID']; ?>&modal=true' class='thickbox'><?php echo $resource['titleText']; ?></a></td>
 					<td <?php echo $classAdd; ?>><?php echo $resource['createDate']; ?></td>
 					<td <?php echo $classAdd; ?>><?php echo $acquisitionType->shortName; ?></td>
 					<td <?php echo $classAdd; ?>><?php echo $status->shortName; ?></td>
 					<td <?php echo $classAdd; ?> style='text-align:right; width:40px;'>
-					<a href='ajax_forms.php?action=getNewResourceForm&height=483&width=775&resourceID=<?php echo $resource['resourceID']; ?>&modal=true' class='thickbox'><img src='images/edit.gif' alt='edit' title='edit request'></a>&nbsp;
+					<a href='ajax_forms.php?action=getNewResourceForm&height=483&width=942&resourceID=<?php echo $resource['resourceID']; ?>&modal=true' class='thickbox'><img src='images/edit.gif' alt='edit' title='edit request'></a>&nbsp;
 					<a href='javascript:void(0);' class='deleteRequest' id='<?php echo $resource['resourceID']; ?>'><img src='images/cross.gif' alt='remove request' title='remove request'></a>
 					</td>
 				</tr>
@@ -2385,6 +2416,82 @@ switch ($_GET['action']) {
 		echo "<a href='ajax_forms.php?action=getAdminAlertDaysForm&alertDaysInAdvanceID=&height=128&width=260&modal=true' class='thickbox'>add days</a>";
 
 		break;
+
+
+        case 'getAdminDueDateDisplay':
+
+                $alertEmailAddress = new AlertEmailAddress();
+                $alertDaysInAdvance = new AlertDaysInAdvance();
+
+
+                $emailAddressArray = $alertEmailAddress->allAsArray();
+                $daysInAdvanceArray = $alertDaysInAdvance->allAsArray();
+
+                echo "<div class='adminRightHeader'>Due Date Settings</div>";
+
+                if (count($emailAddressArray) > 0){
+                        ?>
+                        <table class='linedDataTable'>
+                                <tr>
+                                <th style='width:100%;'>Email Address</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                </tr>
+                                <?php
+
+                                foreach($emailAddressArray as $emailAddress) {
+                                        echo "<tr>";
+                                        echo "<td>" . $emailAddress['emailAddress'] . "</td>";
+                                        echo "<td><a href='ajax_forms.php?action=getAdminAlertEmailForm&alertEmailAddressID=" . $emailAddress['alertEmailAddressID'] . "&height=128&width=260&modal=true' class='thickbox'><img src='images/edit.gif' alt='edit' title='edit'></a></td>";
+                                        echo "<td><a href='javascript:deleteAlert(\"AlertEmailAddress\", " . $emailAddress['alertEmailAddressID'] . ");'><img src='images/cross.gif' alt='remove' title='remove'></a></td>";
+                                        echo "</tr>";
+                                }
+
+                                ?>
+                        </table>
+                        <?php
+
+                }else{
+                        echo "(none found)<br />";
+                }
+
+                echo "<a href='ajax_forms.php?action=getAdminDueDateEmailForm&alertEmailAddressID=&height=128&width=260&modal=true' class='thickbox'>add email address</a>";
+                echo "<br /><br /><br />";
+
+
+                if (count($daysInAdvanceArray) > 0){
+                        ?>
+                        <table class='linedDataTable'>
+                                <tr>
+                                <th style='width:100%;'>Days in advance of expiration</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                </tr>
+                                <?php
+
+                                foreach($daysInAdvanceArray as $daysInAdvance) {
+                                        echo "<tr>";
+                                        echo "<td>" . $daysInAdvance['daysInAdvanceNumber'] . "</td>";
+                                        echo "<td><a href='ajax_forms.php?action=getAdminAlertDaysForm&alertDaysInAdvanceID=" . $daysInAdvance['alertDaysInAdvanceID'] . "&height=128&width=260&modal=true' class='thickbox'><img src='images/edit.gif' alt='edit' title='edit'></a></td>";
+                                        echo "<td><a href='javascript:deleteAlert(\"AlertDaysInAdvance\", " . $daysInAdvance['alertDaysInAdvanceID'] . ");'><img src='images/cross.gif' alt='remove' title='remove'></a></td>";
+                                        echo "</tr>";
+                                }
+
+                                ?>
+                        </table>
+                        <?php
+
+                }else{
+                        echo "(none found)<br />";
+                }
+
+
+
+
+                echo "<a href='ajax_forms.php?action=getAdminDueDateDaysForm&alertDaysInAdvanceID=&height=128&width=260&modal=true' class='thickbox'>add days</a>";
+
+                break;
+
 
 
 

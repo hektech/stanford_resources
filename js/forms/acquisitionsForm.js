@@ -110,12 +110,14 @@
 
 	$(".addPayment").live('click', function () {
 
+                var pYr = $('.newPaymentTable').children().children().children().children('.paymentYear').val();
 		var fName = $('.newPaymentTable').children().children().children().children('.fundName').val();
 		var typeID = $('.newPaymentTable').children().children().children().children('.orderTypeID').val();
 		var pAmount = $('.newPaymentTable').children().children().children().children('.paymentAmount').val();
+                var pDetail = $('.newPaymentTable').children().children().children().children('.paymentDetail').val();
 						
 		if (((pAmount == '') || (pAmount == null)) && ((fName == '') || (fName == null))){
-			$('#div_errorPayment').html('Error - Either amount or fund is required');
+			$('#div_errorPayment').html('Error - Either fund or price is required');
 			return false;		
 		}else if((typeID == '') || (typeID == null)){
 			$('#div_errorPayment').html('Error - order type is a required field');
@@ -157,8 +159,10 @@
 			//next put the original clone back, we just need to reset the values
 			originalTR.appendTo('.newPaymentTable');
 			$('.newPaymentTable').children().children().children().children('.orderTypeID').val('');
+                        $('.newPaymentTable').children().children().children().children('.paymentYear').val('');
 			$('.newPaymentTable').children().children().children().children('.fundName').val('');
 			$('.newPaymentTable').children().children().children().children('.paymentAmount').val('');
+                        $('.newPaymentTable').children().children().children().children('.paymentDetail').val('');
 			
 
 			return false;
@@ -182,11 +186,15 @@ function submitOrderForm(){
 	      orderTypeList += $(this).val() + ":::";
 	}); 
 
+        paymentYearList ='';
+        $(".paymentYear").each(function(id) {
+              paymentYearList += $(this).val() + ":::";
+        });
+
 	fundNameList ='';
 	$(".fundName").each(function(id) {
 	      fundNameList += $(this).val() + ":::";
 	}); 
-
 
 	paymentAmountList ='';
 	$(".paymentAmount").each(function(id) {
@@ -198,6 +206,11 @@ function submitOrderForm(){
 	      currencyCodeList += $(this).val() + ":::";
 	}); 
 	
+        paymentDetailList ='';
+        $(".paymentDetail").each(function(id) {
+              paymentDetailList += $(this).val() + ":::";
+        });
+
 
 	if (validateForm() === true) {
 		$('#submitOrder').attr("disabled", "disabled"); 
@@ -205,7 +218,7 @@ function submitOrderForm(){
 			 type:       "POST",
 			 url:        "ajax_processing.php?action=submitAcquisitions",
 			 cache:      false,
-			 data:       { resourceID: $("#editResourceID").val(), acquisitionTypeID: $("#acquisitionTypeID").val(), orderNumber: $("#orderNumber").val(), systemNumber: $("#systemNumber").val(), subscriptionStartDate: $("#subscriptionStartDate").val(), subscriptionEndDate: $("#subscriptionEndDate").val(), subscriptionAlertEnabledInd: $("#subscriptionAlertEnabledInd:checked").val(), purchaseSites: purchaseSitesList, orderTypes: orderTypeList, fundNames: fundNameList, paymentAmounts: paymentAmountList, currencyCodes: currencyCodeList },
+			 data:       { resourceID: $("#editResourceID").val(), acquisitionTypeID: $("#acquisitionTypeID").val(), orderNumber: $("#orderNumber").val(), systemNumber: $("#systemNumber").val(), subscriptionStartDate: $("#subscriptionStartDate").val(), subscriptionEndDate: $("#subscriptionEndDate").val(), invoiceDate: $("#invoiceDate").val(), subscriptionAlertEnabledInd: $("#subscriptionAlertEnabledInd:checked").val(), invoiceAlertEnabledInd: $("#invoiceAlertEnabledInd:checked").val(), purchaseSites: purchaseSitesList, orderTypes: orderTypeList, paymentYears: paymentYearList, fundNames: fundNameList, paymentAmounts: paymentAmountList, currencyCodes: currencyCodeList, paymentDetails: paymentDetailList, },
 			 success:    function(html) {
 				if (html){
 					$("#span_errors").html(html);
@@ -233,9 +246,11 @@ function submitOrderForm(){
  function validateForm (){
  	myReturn=0;
 
+        var pYr = $('.newPaymentTable').children().children().children().children('.paymentYear').val();
 	var fName = $('.newPaymentTable').children().children().children().children('.fundName').val();
 	var typeID = $('.newPaymentTable').children().children().children().children('.orderTypeID').val();
 	var pAmount = $('.newPaymentTable').children().children().children().children('.paymentAmount').val();
+        var pDetail = $('.newPaymentTable').children().children().children().children('.paymentDetail').val();
 
 	//also perform same checks on the current record in case add button wasn't clicked
 	if ((((pAmount == '') || (pAmount == null)) && ((fName == '') || (fName == null))) && ((pAmount != '') || (fName != ''))){

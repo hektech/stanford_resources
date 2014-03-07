@@ -32,7 +32,7 @@ class AlertDaysInAdvance extends DatabaseObject {
 					FROM Resource
 					WHERE ((DATE_SUB(subscriptionEndDate, INTERVAL " . $this->daysInAdvanceNumber . " DAY) = CURDATE()) OR
 					(subscriptionEndDate = CURDATE()))
-					AND subscriptionAlertEnabledInd = '1'";
+					AND ((subscriptionAlertEnabledInd = '1') OR (invoiceAlertEnabledInd = '1'))";
 
 
 		$result = $this->db->processQuery($query, 'assoc');

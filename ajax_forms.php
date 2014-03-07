@@ -185,16 +185,16 @@ switch ($_GET['action']) {
 
 		<input type='hidden' id='organizationID' value='<?php echo $orgID; ?>' />
 		<input type='hidden' id='editResourceID' value='<?php echo $resourceID; ?>' />
-		<div class='formTitle' style='width:745px;'><span class='headerText'><?php if ($resourceID) { echo "Edit Saved Resource"; }else{ echo "Add New Resource"; } ?></span></div>
+		<div class='formTitle' style='width:928px;'><span class='headerText'><?php if ($resourceID) { echo "Edit Saved Resource"; }else{ echo "Add New Resource"; } ?></span></div>
 		<div class='smallDarkRedText' style='height:14px;margin:3px 0px 0px 0px;'>&nbsp;* required fields</div>
 
 		<table class='noBorder'>
 		<tr style='vertical-align:top;'>
-		<td style='vertical-align:top; padding-right:35px;'>
+		<td style='vertical-align:top; padding-right:5px;'>
 
 			<span class='surroundBoxTitle'>&nbsp;&nbsp;<b>Product</b>&nbsp;&nbsp;</span>
 
-			<table class='surroundBox' style='width:350px;'>
+			<table class='surroundBox' style='width:340px;'>
 			<tr>
 			<td>
 
@@ -323,77 +323,84 @@ switch ($_GET['action']) {
 		</td>
 		<td>
 
-			<span class='surroundBoxTitle'>&nbsp;&nbsp;<label for='resourceFormatID'><b>Initial Cost</b></label>&nbsp;&nbsp;</span>
+			<span class='surroundBoxTitle'>&nbsp;&nbsp;<label for='resourceFormatID'><b>Payments</b></label>&nbsp;&nbsp;</span>
 
-			<table class='surroundBox' style='width:350px;'>
-			<tr>
-			<td>
+                        <table class='surroundBox' style='width:570px;'>
+                        <tr>
+                        <td>
+
+                                <table class='noBorder smallPadding newPaymentTable' style='width:415px;margin:7px 15px 0px 15px;'>
+                                <tr>
+                                        <td style='vertical-align:top;text-align:left;font-weight:bold;white-space:nowrap;'>Payment Year:</td>
+                                        <td style='vertical-align:top;text-align:left;font-weight:bold;'>Fund:</td>
+                                        <td style='vertical-align:top;text-align:left;font-weight:bold;' colspan='2'>Price:</td>
+                                        <td style='vertical-align:top;text-align:left;font-weight:bold;'>Type:</td>
+                                        <td style='vertical-align:top;text-align:left;font-weight:bold;'>Details:</td>
+                                        <td>&nbsp;</td>
+                                </tr>
 
 
-				<table class='noBorder smallPadding newPaymentTable' style='width:320px;margin:7px 15px 0px 15px;'>
+                                <tr class='newPaymentTR'>
+
+                                <td style='vertical-align:top;text-align:left;background:white;'>
+                                <input type='text' value = '' style='width:83px;' class='changeDefaultWhite changeInput paymentYear' />
+                                </td>
+
+                                <td style='vertical-align:top;text-align:left;background:white;'>
+                                <input type='text' value = '' style='width:70px;' class='changeDefaultWhite changeInput fundName' />
+                                </td>
+
+                                <td style='vertical-align:top;text-align:left;background:white;'>
+                                <input type='text' value = '' style='width:70px;' class='changeDefaultWhite changeInput paymentAmount' />
+                                </td>
+
+
+                                <td style='vertical-align:top;text-align:left;'>
+                                        <select style='width:50px;' class='changeSelect currencyCode'>
+                                        <?php
+                                        foreach ($currencyArray as $currency){
+                                                if ($currency['currencyCode'] == $config->settings->defaultCurrency){
+                                                        echo "<option value='" . $currency['currencyCode'] . "' selected class='changeSelect'>" . $currency['currencyCode'] . "</option>\n";
+                                                }else{
+                                                        echo "<option value='" . $currency['currencyCode'] . "' class='changeSelect'>" . $currency['currencyCode'] . "</option>\n";
+                                                }
+                                        }
+                                        ?>
+                                        </select>
+                                </td>
+
+                                <td style='vertical-align:top;text-align:left;'>
+                                        <select style='width:80px;' class='changeSelect orderTypeID'>
+                                        <option value='' selected></option>
+                                        <?php
+                                        foreach ($orderTypeArray as $orderType){
+                                                echo "<option value='" . $orderType['orderTypeID'] . "'>" . $orderType['shortName'] . "</option>\n";
+                                        }
+                                        ?>
+                                        </select>
+                                </td>
+
+                                <td style='vertical-align:top;text-align:left;background:white;'>
+                                <input type='text' value = '' style='width:100px;' class='changeDefaultWhite changeInput paymentDetail' />
+                                </td>
+
+
+                                <td style='vertical-align:center;text-align:center;width:37px;'>
+                                <a href='javascript:void();'><img src='images/add.gif' class='addPayment' alt='add this payment' title='add payment'></a>
+                                </td>
+                                </tr>
+
+                                </table>
+
+
+
+				<table class='noBorder smallPadding paymentTable' style='width:503px;margin:7px 15px;'>
+
 				<tr>
-					<td style='vertical-align:top;text-align:left;font-weight:bold;'>Fund:</td>
-					<td style='vertical-align:top;text-align:left;font-weight:bold;' colspan='2'>Price:</td>
-					<td style='vertical-align:top;text-align:left;font-weight:bold;'>Type:</td>
-					<td>&nbsp;</td>
-				</tr>
-
-
-				<tr class='newPaymentTR'>
-
-				<td style='vertical-align:top;text-align:left;background:white;'>
-				<input type='text' value = '' style='width:60px;' class='changeDefaultWhite changeInput fundName' />
-				</td>
-
-				<td style='vertical-align:top;text-align:left;background:white;'>
-				<input type='text' value = '' style='width:50px;' class='changeDefaultWhite changeInput paymentAmount' />
-				</td>
-
-
-				<td style='vertical-align:top;text-align:left;'>
-					<select style='width:50px; padding:0px; margin:0px;' class='changeSelect currencyCode'>
-					<?php
-					foreach ($currencyArray as $currency){
-						if ($currency['currencyCode'] == $config->settings->defaultCurrency){
-							echo "<option value='" . $currency['currencyCode'] . "' selected class='changeSelect'>" . $currency['currencyCode'] . "</option>\n";
-						}else{
-							echo "<option value='" . $currency['currencyCode'] . "' class='changeSelect'>" . $currency['currencyCode'] . "</option>\n";
-						}
-					}
-					?>
-					</select>
-				</td>
-
-
-				<td style='vertical-align:top;text-align:left;'>
-					<select style='width:70px;' class='changeSelect orderTypeID'>
-					<option value='' selected></option>
-					<?php
-					foreach ($orderTypeArray as $orderType){
-						echo "<option value='" . $orderType['orderTypeID'] . "'>" . $orderType['shortName'] . "</option>\n";
-					}
-					?>
-					</select>
-				</td>
-
-
-
-				<td style='vertical-align:center;text-align:left;width:37px;'>
-				<a href='javascript:void();'><img src='images/add.gif' class='addPayment' alt='add this payment' title='add payment'></a>
-				</td>
-				</tr>
-
-				</table>
-
-
-
-				<table class='noBorder smallPadding paymentTable' style='width:320px;margin:7px 15px;'>
-
-				<tr>
-				<td colspan='5'>
+				<td colspan='7'>
 				<div class='smallDarkRedText' id='div_errorPayment' style='margin:0px 20px 0px 26px;'></div>
 
-				<hr style='width:280px;margin:0px 0px 5px 5px;' />
+				<hr style='width:483px;margin:0px 0px 5px 5px;' />
 				</td>
 				</tr>
 
@@ -402,50 +409,59 @@ switch ($_GET['action']) {
 				if (count($paymentArray) > 0){
 
 					foreach ($paymentArray as $payment){
-					?>
-						<tr>
-						<td style='vertical-align:top;text-align:left;'>
-						<input type='text' value = '<?php echo $payment['fundName']; ?>' style='width:60px;' class='changeInput fundName' />
-						</td>
+                                        ?>
+                                                <tr>
 
-						<td style='vertical-align:top;text-align:left;'>
-						<input type='text' value = '<?php echo integer_to_cost($payment['paymentAmount']); ?>' style='width:50px;' class='changeInput paymentAmount' />
-						</td>
+                                                <td style='vertical-align:top;text-align:left;'>
+                                                <input type='text' value = '<?php echo $payment['paymentYear']; ?>' style='width:83px;' class='changeInput paymentYear' />
+                                                </td>
 
-						<td style='vertical-align:top;text-align:left;'>
-							<select style='width:50px;' class='changeSelect currencyCode'>
-							<?php
-							foreach ($currencyArray as $currency){
-								if ($currency['currencyCode'] == $payment['currencyCode']){
-									echo "<option value='" . $currency['currencyCode'] . "' selected class='changeSelect'>" . $currency['currencyCode'] . "</option>\n";
-								}else{
-									echo "<option value='" . $currency['currencyCode'] . "' class='changeSelect'>" . $currency['currencyCode'] . "</option>\n";
-								}
-							}
-							?>
-							</select>
-						</td>
+                                                <td style='vertical-align:top;text-align:left;'>
+                                                <input type='text' value = '<?php echo $payment['fundName']; ?>' style='width:70px;' class='changeInput fundName' />
+                                                </td>
 
-						<td style='vertical-align:top;text-align:left;'>
-						<select style='width:70px;' class='changeSelect orderTypeID'>
-						<option value=''></option>
-						<?php
-						foreach ($orderTypeArray as $orderType){
-							if (!(trim(strval($orderType['orderTypeID'])) != trim(strval($payment['orderTypeID'])))){
-								echo "<option value='" . $orderType['orderTypeID'] . "' selected class='changeSelect'>" . $orderType['shortName'] . "</option>\n";
-							}else{
-								echo "<option value='" . $orderType['orderTypeID'] . "' class='changeSelect'>" . $orderType['shortName'] . "</option>\n";
-							}
-						}
-						?>
-						</select>
-						</td>
+                                                <td style='vertical-align:top;text-align:left;'>
+                                                <input type='text' value = '<?php echo integer_to_cost($payment['paymentAmount']); ?>' style='width:70px;' class='changeInput paymentAmount' />
+                                                </td>
+
+                                                <td style='vertical-align:top;text-align:left;'>
+                                                        <select style='width:50px;' class='changeSelect currencyCode'>
+                                                        <?php
+                                                        foreach ($currencyArray as $currency){
+                                                                if ($currency['currencyCode'] == $payment['currencyCode']){
+                                                                        echo "<option value='" . $currency['currencyCode'] . "' selected class='changeSelect'>" . $currency['currencyCode'] . "</option>\n";
+                                                                }else{
+                                                                        echo "<option value='" . $currency['currencyCode'] . "' class='changeSelect'>" . $currency['currencyCode'] . "</option>\n";
+                                                                }
+                                                        }
+                                                        ?>
+                                                        </select>
+                                                </td>
+
+                                                <td style='vertical-align:top;text-align:left;'>
+                                                <select style='width:80px;' class='changeSelect orderTypeID'>
+                                                <option value=''></option>
+                                                <?php
+                                                foreach ($orderTypeArray as $orderType){
+                                                        if (!(trim(strval($orderType['orderTypeID'])) != trim(strval($payment['orderTypeID'])))){
+                                                                echo "<option value='" . $orderType['orderTypeID'] . "' selected class='changeSelect'>" . $orderType['shortName'] . "</option>\n";
+                                                        }else{
+                                                                echo "<option value='" . $orderType['orderTypeID'] . "' class='changeSelect'>" . $orderType['shortName'] . "</option>\n";
+                                                        }
+                                                }
+                                                ?>
+                                                </select>
+                                                </td>
+
+                                                <td style='vertical-align:top;text-align:left;'>
+                                                <input type='text' value = '<?php echo $payment['paymentDetail']; ?>' style='width:100px;' class='changeInput paymentDetail' />
+                                                </td>
 
 
-						<td style='vertical-align:top;text-align:center;width:37px;'>
-							<a href='javascript:void();'><img src='images/cross.gif' alt='remove this payment' title='remove this payment' class='remove' /></a>
-						</td>
-						</tr>
+                                                <td style='vertical-align:top;text-align:center;width:37px;'>
+                                                        <a href='javascript:void();'><img src='images/cross.gif' alt='remove this payment' title='remove this payment' class='remove' /></a>
+                                                </td>
+                                                </tr>
 
 					<?php
 					}
@@ -465,17 +481,17 @@ switch ($_GET['action']) {
 
 			<span class='surroundBoxTitle'>&nbsp;&nbsp;<label for='resourceTypeID'><b>Resource Type</b></label>&nbsp;&nbsp;</span>
 
-			<table class='surroundBox' style='width:350px;'>
+			<table class='surroundBox' style='width:574px;'>
 			<tr>
 			<td>
 
-				<table class='noBorder' style='width:320px; margin:5px 15px;'>
+				<table class='noBorder' style='width:520px; margin:5px 15px;'>
 				<?php
 				$i=0;
 
 				foreach ($resourceTypeArray as $resourceType){
 					$i++;
-					if(($i % 3)==1){
+					if(($i % 5)==1){
 						echo "<tr>\n";
 					}
 
@@ -487,14 +503,14 @@ switch ($_GET['action']) {
 
 					echo "<td><input type='radio' name='resourceTypeID' id='resourceTypeID' value='" . $resourceType['resourceTypeID'] . "'" . $checked . "/>  " . $resourceType['shortName'] . "</td>\n";
 
-					if(($i % 3)==0){
+					if(($i % 5)==0){
 						echo "</tr>\n";
 					}
 				}
 
-				if(($i % 3)==1){
+				if(($i % 5)==1){
 					echo "<td>&nbsp;</td><td>&nbsp;</td></tr>\n";
-				}else if(($i % 3)==2){
+				}else if(($i % 5)==2){
 					echo "<td>&nbsp;</td></tr>\n";
 				}
 
@@ -511,7 +527,7 @@ switch ($_GET['action']) {
 
 			<span class='surroundBoxTitle'>&nbsp;&nbsp;<label for='resourceFormatID'><b>Notes</b></label>&nbsp;&nbsp;</span>
 
-			<table class='surroundBox' style='width:350px;'>
+			<table class='surroundBox' style='width:556px;'>
 			<tr>
 			<td>
 
@@ -519,7 +535,7 @@ switch ($_GET['action']) {
 
 					<tr>
 					<td style='vertical-align:top;text-align:left;'><span class='smallGreyText'>Include any additional information</span><br />
-					<textarea rows='5' id='noteText' name='noteText' style='width:310px'><?php echo $resourceNote->noteText; ?></textarea></td>
+					<textarea rows='2' id='noteText' name='noteText' style='width:528px'><?php echo $resourceNote->noteText; ?></textarea></td>
 					</tr>
 				</table>
 			</td>
@@ -647,7 +663,7 @@ switch ($_GET['action']) {
 					</tr>
 
 					<tr>
-					<td style='vertical-align:top;text-align:left;font-weight:bold;'><label for='descriptionText'>Description:</label></td>
+					<td style='vertical-align:top;text-align:left;font-weight:bold;'><label for='descriptionText'>Notes:</label></td>
 					<td><textarea rows='4' id='descriptionText' name='descriptionText' style='width:260px' class='changeInput' ><?php echo $resource->descriptionText; ?></textarea></td>
 					</tr>
 
@@ -678,11 +694,11 @@ switch ($_GET['action']) {
 					</td>
 					</tr>
 
+
 					<tr>
-					<td style='vertical-align:top;text-align:left;font-weight:bold;'><label for='isbnOrISSN'>ISSN / ISBN:</label></td>
+					<td style='vertical-align:top;text-align:left;font-weight:bold;'><label for='isbnOrISSN'>ISSN / ISBN:&nbsp;</label></td>
 					<td><input type='text' id='isbnOrISSN' name='isbnOrISSN' value = '<?php echo $resource->isbnOrISSN; ?>' style='width:97px;' class='changeInput'  /><span id='span_errors_isbnOrISSN' class='smallDarkRedText'></span></td>
 					</tr>
-
 
 					<tr>
 					<td style='vertical-align:top;text-align:left;font-weight:bold;'><label for='resourceFormatID'>Format:</label></td>
@@ -909,7 +925,7 @@ switch ($_GET['action']) {
 						</td>
 
 						<td style='vertical-align:top;text-align:left;width:37px;'>
-							<a href='javascript:void();'><img src='images/cross.gif' alt='remove this alias' title='remove this alias' class='remove' /></a>
+							<a href='javascript:void();'><img src='images/cross.gif' alt='remove alias' title='remove alias' class='remove' /></a>
 						</td>
 						</tr>
 
@@ -976,6 +992,14 @@ switch ($_GET['action']) {
 			$endDate=format_date($resource->subscriptionEndDate);
 		}
 
+
+                if (($resource->invoiceDate == "0000-00-00") || ($resource->invoiceDate == "")){
+                        $invoiceDate='';
+                }else{
+                        $invoiceDate=format_date($resource->invoiceDate);
+                }
+
+
 		//get all purchase sites for output in checkboxes
 		$purchaseSiteArray = array();
 		$purchaseSiteObj = new PurchaseSite();
@@ -1027,13 +1051,13 @@ switch ($_GET['action']) {
 		<form id='resourceForm'>
 		<input type='hidden' name='editResourceID' id='editResourceID' value='<?php echo $resourceID; ?>'>
 
-		<div class='formTitle' style='width:740px; margin-bottom:5px;'><span class='headerText'>Edit Acquisitions Information</span></div>
+		<div class='formTitle' style='width:937px; margin-bottom:5px;'><span class='headerText'>Edit Acquisitions Information</span></div>
 
 		<span class='smallDarkRedText' id='span_errors'></span>
 
-		<table class='noBorder' style='width:735px;'>
+		<table class='noBorder' style='width:870px;'>
 		<tr style='vertical-align:top;'>
-		<td style='vertical-align:top; padding-right:35px;'>
+		<td style='vertical-align:top; padding-right:5px;'>
 
 
 			<span class='surroundBoxTitle'>&nbsp;&nbsp;<label for='orderInformation'><b>Order</b></label>&nbsp;&nbsp;</span>
@@ -1043,7 +1067,7 @@ switch ($_GET['action']) {
 			<td>
 				<table class='noBorder' style='width:310px; margin:15px 20px;'>
 				<tr>
-				<td style='vertical-align:top;text-align:left;font-weight:bold'><label for='acquisitionTypeID'>Acquisition Type:</label></td>
+				<td style='vertical-align:top;text-align:right;font-weight:bold'><label for='acquisitionTypeID'>Acquisition Type:</label></td>
 				<td>
 				<select name='acquisitionTypeID' id='acquisitionTypeID' style='width:100px;' class='changeSelect'>
 				<option value=''></option>
@@ -1061,38 +1085,58 @@ switch ($_GET['action']) {
 				</tr>
 
 				<tr>
-				<td style='vertical-align:top;text-align:left;font-weight:bold'><label for='orderNumber'>Order Number:</label></td>
+				<td style='vertical-align:top;text-align:right;font-weight:bold'><label for='orderNumber'>Order Number:</label></td>
 				<td><input type='text' id='orderNumber' name='orderNumber' value = '<?php echo $resource->orderNumber; ?>' style='width:95px;' class='changeInput' /></td>
 				</tr>
 
 				<tr>
-				<td style='vertical-align:top;text-align:left;font-weight:bold'><label for='systemNumber'>System Number:</label></td>
+				<td style='vertical-align:top;text-align:right;font-weight:bold'><label for='systemNumber'>System Number:</label></td>
 				<td><input type='text' id='systemNumber' name='systemNumber' value = '<?php echo $resource->systemNumber; ?>' style='width:95px;' class='changeInput' /></td>
 				</tr>
 
 				<tr>
-				<td style='vertical-align:top;text-align:left;font-weight:bold'><label for='subscriptionStartDate'>Subscription Start:</label></td>
+				<td style='vertical-align:top;text-align:right;font-weight:bold'><label for='subscriptionStartDate'>Subscription Start:</label></td>
 				<td><input class='date-pick' id='subscriptionStartDate' name='subscriptionStartDate' value = '<?php echo $startDate; ?>' style='width:75px;' /></td>
 				</tr>
 
 				<tr>
-				<td style='vertical-align:top;text-align:left;font-weight:bold'><label for='subscriptionEndDate'>Subscription End:</label></td>
+				<td style='vertical-align:top;text-align:right;font-weight:bold'><label for='subscriptionEndDate'>Subscription End:</label></td>
 				<td><input class='date-pick' id='subscriptionEndDate' name='subscriptionEndDate' value = '<?php echo $endDate; ?>' style='width:75px;' />
 				</td>
 				</tr>
 
-				<?php if ($config->settings->enableAlerts == 'Y'){ ?>
-				<tr>
-				<td style='vertical-align:top;text-align:left;font-weight:bold'>&nbsp;</td>
-				<td>
-				<div class="checkboxes" style='text-align:left;'>
-					<label><input id='subscriptionAlertEnabledInd' type='checkbox' style='text-align:bottom' value='1' <?php if($resource->subscriptionAlertEnabledInd == 1) { echo "checked"; } ?> />&nbsp;<span>Enable Alert</span></label>
-				</div>
-				</td>
-				</tr>
-				<?php } ?>
+                                <?php if ($config->settings->enableAlerts == 'Y'){ ?>
+                                <tr>
+                                <td></td>
+                                <td>
+                                <div class="checkboxes" style='text-align:left;'>
+                                        <label><input id='subscriptionAlertEnabledInd' type='checkbox' style='text-align:bottom' value='1' <?php if($resource->subscriptionAlertEnabledInd == 1) { echo "checked"; } ?> />&nbsp;<span>Enable expiration alert</span></label>
+                                </div>
+                                </td>
+                                </tr>
+                                <?php } ?>
 
+                                <tr><td></td></tr>
+                                <tr><td></td></tr>
+
+                                <tr>
+                                <td style='vertical-align:top;text-align:right;font-weight:bold'><label for='invoiceDate'>Invoice Date:</label></td>
+                                <td><input class='date-pick' id='invoiceDate' name='invoiceDate' value = '<?php echo $invoiceDate; ?>' style='width:75px;' />
+                                </td>
+                                </tr>
+
+                                <?php if ($config->settings->enableDueDates == 'Y'){ ?>
+                                <tr>
+                                <td></td>
+                                <td>
+                                <div class="checkboxes" style='text-align:left;'>
+                                        <label><input id='invoiceAlertEnabledInd' type='checkbox' style='text-align:bottom' value='1' <?php if($resource->invoiceAlertEnabledInd == 1) { echo "checked"; } ?> />&nbsp;<span>Enable invoice alert</span></label>
+                                </div>
+                                </td>
+                                </tr>
+                                <?php } ?>
 				</table>
+
 
 			</td>
 			</tr>
@@ -1102,29 +1146,35 @@ switch ($_GET['action']) {
 		</td>
 		<td>
 
-			<span class='surroundBoxTitle'>&nbsp;&nbsp;<label for='resourcePayments'><b>Initial Cost</b></label>&nbsp;&nbsp;</span>
+			<span class='surroundBoxTitle'>&nbsp;&nbsp;<label for='resourcePayments'><b>Payments</b></label>&nbsp;&nbsp;</span>
 
-			<table class='surroundBox' style='width:340px;'>
+			<table class='surroundBox' style='width:570px;'>
 			<tr>
 			<td>
 
-				<table class='noBorder smallPadding newPaymentTable' style='width:320px;margin:7px 15px 0px 15px;'>
+				<table class='noBorder smallPadding newPaymentTable' style='width:415px;margin:7px 15px 0px 15px;'>
 				<tr>
+                                        <td style='vertical-align:top;text-align:left;font-weight:bold;white-space: nowrap;'>Payment Year:</td>
 					<td style='vertical-align:top;text-align:left;font-weight:bold;'>Fund:</td>
 					<td style='vertical-align:top;text-align:left;font-weight:bold;' colspan='2'>Price:</td>
 					<td style='vertical-align:top;text-align:left;font-weight:bold;'>Type:</td>
+                                        <td style='vertical-align:top;text-align:left;font-weight:bold;'>Details:</td>
 					<td>&nbsp;</td>
 				</tr>
 
 
 				<tr class='newPaymentTR'>
 
+                                <td style='vertical-align:top;text-align:left;background:white;'>
+                                <input type='text' value = '' style='width:83px;' class='changeDefaultWhite changeInput paymentYear' />
+                                </td>
+
 				<td style='vertical-align:top;text-align:left;background:white;'>
 				<input type='text' value = '' style='width:70px;' class='changeDefaultWhite changeInput fundName' />
 				</td>
 
 				<td style='vertical-align:top;text-align:left;background:white;'>
-				<input type='text' value = '' style='width:50px;' class='changeDefaultWhite changeInput paymentAmount' />
+				<input type='text' value = '' style='width:70px;' class='changeDefaultWhite changeInput paymentAmount' />
 				</td>
 
 
@@ -1142,9 +1192,8 @@ switch ($_GET['action']) {
 					</select>
 				</td>
 
-
 				<td style='vertical-align:top;text-align:left;'>
-					<select style='width:70px;' class='changeSelect orderTypeID'>
+					<select style='width:80px;' class='changeSelect orderTypeID'>
 					<option value='' selected></option>
 					<?php
 					foreach ($orderTypeArray as $orderType){
@@ -1153,6 +1202,11 @@ switch ($_GET['action']) {
 					?>
 					</select>
 				</td>
+
+                                <td style='vertical-align:top;text-align:left;background:white;'>
+                                <input type='text' value = '' style='width:100px;' class='changeDefaultWhite changeInput paymentDetail' />
+                                </td>
+
 
 				<td style='vertical-align:center;text-align:center;width:37px;'>
 				<a href='javascript:void();'><img src='images/add.gif' class='addPayment' alt='add this payment' title='add payment'></a>
@@ -1163,13 +1217,13 @@ switch ($_GET['action']) {
 
 
 
-				<table class='noBorder smallPadding paymentTable' style='width:320px;margin:7px 15px;'>
+				<table class='noBorder smallPadding paymentTable' style='width:503px;margin:7px 15px;'>
 
 				<tr>
-				<td colspan='5'>
+				<td colspan='7'>
 				<div class='smallDarkRedText' id='div_errorPayment' style='margin:0px 20px 0px 26px;'></div>
 
-				<hr style='width:300px;margin:0px 0px 5px 5px;' />
+				<hr style='width:483px;margin:0px 0px 5px 5px;' />
 				</td>
 				</tr>
 
@@ -1179,12 +1233,17 @@ switch ($_GET['action']) {
 					foreach ($paymentArray as $payment){
 					?>
 						<tr>
+
+                                                <td style='vertical-align:top;text-align:left;'>
+                                                <input type='text' value = '<?php echo $payment['paymentYear']; ?>' style='width:83px;' class='changeInput paymentYear' />
+                                                </td>
+
 						<td style='vertical-align:top;text-align:left;'>
 						<input type='text' value = '<?php echo $payment['fundName']; ?>' style='width:70px;' class='changeInput fundName' />
 						</td>
 
 						<td style='vertical-align:top;text-align:left;'>
-						<input type='text' value = '<?php echo integer_to_cost($payment['paymentAmount']); ?>' style='width:50px;' class='changeInput paymentAmount' />
+						<input type='text' value = '<?php echo integer_to_cost($payment['paymentAmount']); ?>' style='width:70px;' class='changeInput paymentAmount' />
 						</td>
 
 						<td style='vertical-align:top;text-align:left;'>
@@ -1202,7 +1261,7 @@ switch ($_GET['action']) {
 						</td>
 
 						<td style='vertical-align:top;text-align:left;'>
-						<select style='width:70px;' class='changeSelect orderTypeID'>
+						<select style='width:80px;' class='changeSelect orderTypeID'>
 						<option value=''></option>
 						<?php
 						foreach ($orderTypeArray as $orderType){
@@ -1215,6 +1274,10 @@ switch ($_GET['action']) {
 						?>
 						</select>
 						</td>
+
+                                                <td style='vertical-align:top;text-align:left;'>
+                                                <input type='text' value = '<?php echo $payment['paymentDetail']; ?>' style='width:100px;' class='changeInput paymentDetail' />
+                                                </td>
 
 
 						<td style='vertical-align:top;text-align:center;width:37px;'>
@@ -2537,6 +2600,71 @@ switch ($_GET['action']) {
 
 
 
+        case 'getAdminDueDateEmailForm':
+                $alertEmailAddressID = $_GET['alertEmailAddressID'];
+
+                if ($alertEmailAddressID){
+                        $instance = new AlertEmailAddress(new NamedArguments(array('primaryKey' => $alertEmailAddressID)));
+                }else{
+                        $instance = new AlertEmailAddress();
+                }
+
+
+                ?>
+                <div id='div_updateForm'>
+
+                <input type='hidden' id='editAlertEmailAddressID' value='<?php echo $alertEmailAddressID; ?>'>
+
+                <div class='formTitle' style='width:245px;'><span class='headerText' style='margin-left:7px;'><?php if ($alertEmailAddressID){ echo "Edit Alert Email Address"; } else { echo "Add Alert Email Address"; } ?></span></div>
+
+                <span class='smallDarkRedText' id='span_errors'></span>
+
+                <table class="surroundBox" style="width:250px;">
+                <tr>
+                <td>
+
+                        <table class='noBorder' style='width:200px; margin:10px;'>
+                        <td><input type='text' id='emailAddress' value='<?php echo $instance->emailAddress; ?>' style='width:190px;'/></td>
+                        </td>
+                        </tr>
+                        </table>
+
+                </td>
+                </tr>
+                </table>
+                <div class='smallDarkRedText' id='div_form_error'>&nbsp;</div>
+                <table class='noBorderTable' style='width:125px;'>
+                        <tr>
+                                <td style='text-align:left'><input type='button' value='submit' id ='submitAddUpdate'></td>
+                                <td style='text-align:right'><input type='button' value='cancel' onclick="window.parent.tb_remove(); return false;"></td>
+                        </tr>
+                </table>
+
+
+                </form>
+                </div>
+
+                <script type="text/javascript">
+                   //attach enter key event to new input and call add data when hit
+                   $('#emailAddress').keyup(function(e) {
+                                   if(e.keyCode == 13) {
+                                           window.parent.submitAdminAlertEmail();
+                                   }
+                });
+
+
+                   $('#submitAddUpdate').click(function () {
+                               window.parent.submitAdminDueDateEmail();
+                   });
+
+
+        </script>
+
+
+                <?php
+
+                break;
+
 
 
 
@@ -2607,7 +2735,70 @@ switch ($_GET['action']) {
 		break;
 
 
+        case 'getAdminDueDateDaysForm':
+                $alertDaysInAdvanceID = $_GET['alertDaysInAdvanceID'];
 
+                if ($alertDaysInAdvanceID){
+                        $instance = new AlertDaysInAdvance(new NamedArguments(array('primaryKey' => $alertDaysInAdvanceID)));
+                }else{
+                        $instance = new AlertDaysInAdvance();
+                }
+
+
+                ?>
+                <div id='div_updateForm'>
+
+                <input type='hidden' id='editAlertDaysInAdvanceID' value='<?php echo $alertDaysInAdvanceID; ?>'>
+
+                <div class='formTitle' style='width:245px;'><span class='headerText' style='margin-left:7px;'><?php if ($alertDaysInAdvanceID){ echo "Edit Alert Days In Advance"; } else { echo "Add Alert Days In Advance"; } ?></span></div>
+
+                <span class='smallDarkRedText' id='span_errors'></span>
+
+                <table class="surroundBox" style="width:250px;">
+                <tr>
+                <td>
+
+                        <table class='noBorder' style='width:200px; margin:10px;'>
+                        <td><input type='text' id='daysInAdvanceNumber' value='<?php echo $instance->daysInAdvanceNumber; ?>' style='width:190px;'/></td>
+                        </td>
+                        </tr>
+                        </table>
+
+                </td>
+                </tr>
+                </table>
+                <div class='smallDarkRedText' id='div_form_error'>&nbsp;</div>
+                <table class='noBorderTable' style='width:125px;'>
+                        <tr>
+                                <td style='text-align:left'><input type='button' value='submit' id ='submitAddUpdate'></td>
+                                <td style='text-align:right'><input type='button' value='cancel' onclick="window.parent.tb_remove(); return false;"></td>
+                        </tr>
+                </table>
+
+
+                </form>
+                </div>
+
+                <script type="text/javascript">
+                   //attach enter key event to new input and call add data when hit
+                   $('#daysInAdvanceNumber').keyup(function(e) {
+                                   if(e.keyCode == 13) {
+                                           window.parent.submitAdminAlertDays();
+                                   }
+                });
+
+
+                   $('#submitAddUpdate').click(function () {
+                               window.parent.submitAdminDueDateDays();
+                   });
+
+
+        </script>
+
+
+                <?php
+
+                break;
 
 
 
@@ -2669,7 +2860,7 @@ switch ($_GET['action']) {
 			<td>
 				<table class='noBorder' style='width:660px; margin:15px 20px 10px 20px;'>
 				<tr>
-				<td style='vertical-align:top;text-align:left;font-weight:bold;'><label for='acquisitionTypeID'>Acquisition Type:</label></td>
+				<td style='vertical-align:top;text-align:right;font-weight:bold;'><label for='acquisitionTypeID'>Acquisition Type:</label></td>
 				<td>
 				<select name='acquisitionTypeID' id='acquisitionTypeID' style='width:100px;' class='changeSelect' >
 				<?php
@@ -2775,7 +2966,7 @@ switch ($_GET['action']) {
 
 				<table class='noBorder noMargin stepTable' style='width:660px;margin:0px 20px 10px 20px;'>
 				<tr>
-				<td colspan='5'>
+				<td colspan='7'>
 					<hr style='width:650px;margin:0px 0px 15px 5px;' />
 				</td>
 				</tr>

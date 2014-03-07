@@ -57,6 +57,9 @@ if ($user->isAdmin()){
 				<?php if ($config->settings->enableAlerts == 'Y'){ ?>
 				<tr><td><div class='adminMenuLink'><a href='javascript:void(0);' class='AlertAdminLink'>Alert Settings</div></td></tr>
 				<?php } ?>
+                                <?php if ($config->settings->enableDueDates == 'Y'){ ?>
+                                <tr><td><div class='adminMenuLink'><a href='javascript:void(0);' class='DueDateAdminLink'>Due Date Settings</div></td></tr>
+                                <?php } ?>
 				<tr><td><div class='adminMenuLink'><a href='javascript:void(0);' id='AliasType' class='AdminLink'>Alias Type</div></td></tr>
 				<tr><td><div class='adminMenuLink'><a href='javascript:void(0);' id='AttachmentType' class='AdminLink'>Attachment Type</div></td></tr>
 				<tr><td><div class='adminMenuLink'><a href='javascript:void(0);' id='AuthenticationType' class='AdminLink'>Authentication Type</div></td></tr>

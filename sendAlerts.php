@@ -81,6 +81,62 @@ if ($config->settings->enableAlerts == 'Y'){
 	echo "Alerts not enabled in configuration.ini file";
 }
 
+if ($config->settings->enableDueDates == 'Y'){
+        $alertDaysInAdvance = new AlertDaysInAdvance();
 
+        //returns array of all days in advance objects
+        $alertDaysArray = $alertDaysInAdvance->all();
+
+        $resourceIDArray = array();
+
+        //loop through each of the days, e.g. 30, 60, 90
+        foreach ($alertDaysArray as $alertDays){
+                //get resources that fit this criteria
+
+                if (is_numeric($alertDays->daysInAdvanceNumber)){
+                        foreach($alertDays->getResourcesToAlert() as $resource){
+                                $resourceIDArray[] = $resource->resourceID;
+                        }
+                }
+
+        }
+
+
+        if (count($resourceIDArray) > 0){
+                //now get unique resource IDs out
+                $resourceIDArray = array_unique($resourceIDArray);
+
+                //now loop through each resource and send the email alert
+                foreach ($resourceIDArray as $resourceID){
+
+                        $resource = new Resource(new NamedArguments(array('primaryKey' => $resourceID)));
+
+                        $sendToArray = array();
+
+                        //determine who to send the email to
+                        $alertEmailAddress = new AlertEmailAddress();
+
+                        foreach($alertEmailAddress->allAsArray() as $alertEmail){
+                                $sendToArray[] = $alertEmail['emailAddress'];
+                        }
+
+
+                        //formulate email to be sent
+                        $email = new Email();
+                        $email->to = implode(", ", $sendToArray);
+                        $email->message = $util->createMessageFromTemplate('Alert', $resourceID, $resource->titleText, '', '', '');
+                        $email->subject         = "CORAL Alert: " . $resource->titleText;
+
+                        $email->send();
+
+                }
+        }else{
+                echo "No Resources found fitting invoice due date criteria";
+        }
+
+
+}else{
+        echo "Invoice Due Dates not enabled in configuration.ini file";
+}
 
 ?>

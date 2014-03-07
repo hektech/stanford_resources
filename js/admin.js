@@ -31,6 +31,9 @@
 		  updateAlertTable();
 	 });
 
+         $(".DueDateAdminLink").click(function () {
+                  updateDueDateTable();
+         });
 
 	 $(".WorkflowAdminLink").click(function () {
 		  updateWorkflowTable();
@@ -61,6 +64,7 @@
 
 	$(".UserAdminLink").parent().parent().removeClass('selected');
 	$(".AlertAdminLink").parent().parent().removeClass('selected');
+        $(".DueDateAdminLink").parent().parent().removeClass('selected');
 	$(".WorkflowAdminLink").parent().parent().removeClass('selected');
 	$(".AdminLink").parent().parent().removeClass('selected');
 	$(".CurrencyLink").parent().parent().removeClass('selected');
@@ -91,6 +95,7 @@
  function updateCurrencyTable(){
 
   $(".AlertAdminLink").parent().parent().removeClass('selected'); 
+  $(".DueDateAdminLink").parent().parent().removeClass('selected');
   $(".AdminLink").parent().parent().removeClass('selected'); 
   $(".WorkflowAdminLink").parent().parent().removeClass('selected');
   $(".UserAdminLink").parent().parent().removeClass('selected');
@@ -118,6 +123,7 @@
  function updateUserTable(){
 
   $(".AlertAdminLink").parent().parent().removeClass('selected'); 
+  $(".DueDateAdminLink").parent().parent().removeClass('selected');
   $(".AdminLink").parent().parent().removeClass('selected'); 
   $(".WorkflowAdminLink").parent().parent().removeClass('selected');
   $(".CurrencyLink").parent().parent().removeClass('selected');
@@ -149,6 +155,7 @@
   $(".WorkflowAdminLink").parent().parent().removeClass('selected'); 
   $(".CurrencyLink").parent().parent().removeClass('selected'); 
   $(".AlertAdminLink").parent().parent().addClass('selected');
+  $(".DueDateAdminLink").parent().parent().removeClass('selected');
   $(".SubjectsAdminLink").parent().parent().removeClass('selected'); 
 
        $.ajax({
@@ -168,6 +175,31 @@
  }
 
 
+function updateDueDateTable(){
+
+  $(".UserAdminLink").parent().parent().removeClass('selected');
+  $(".AdminLink").parent().parent().removeClass('selected');
+  $(".WorkflowAdminLink").parent().parent().removeClass('selected');
+  $(".CurrencyLink").parent().parent().removeClass('selected');
+  $(".AlertAdminLink").parent().parent().removeClass('selected');
+  $(".DueDateAdminLink").parent().parent().addClass('selected');
+  $(".SubjectsAdminLink").parent().parent().removeClass('selected');
+
+       $.ajax({
+          type:       "GET",
+          url:        "ajax_htmldata.php",
+          cache:      false,
+          data:       "action=getAdminDueDateDisplay",
+          success:    function(html) {
+                $('#div_AdminContent').html(html);
+                tb_reinit();
+          }
+        });
+
+   //make sure error is empty
+   $('#div_error').html("");
+
+ }
 
 
  function updateWorkflowTable(){
@@ -175,6 +207,7 @@
   $(".UserAdminLink").parent().parent().removeClass('selected'); 
   $(".AdminLink").parent().parent().removeClass('selected'); 
   $(".AlertAdminLink").parent().parent().removeClass('selected');
+  $(".DueDateAdminLink").parent().parent().removeClass('selected');
   $(".CurrencyLink").parent().parent().removeClass('selected');
   $(".WorkflowAdminLink").parent().parent().addClass('selected');
   $(".SubjectsAdminLink").parent().parent().removeClass('selected'); 
@@ -200,6 +233,7 @@ function updateSubjectsTable(){
   $(".UserAdminLink").parent().parent().removeClass('selected'); 
   $(".AdminLink").parent().parent().removeClass('selected'); 
   $(".AlertAdminLink").parent().parent().removeClass('selected');
+  $(".DueDateAdminLink").parent().parent().removeClass('selected');
   $(".CurrencyLink").parent().parent().removeClass('selected');
   $(".WorkflowAdminLink").parent().parent().removeClass('selected');
   $(".SubjectsAdminLink").parent().parent().addClass('selected');  
@@ -290,7 +324,19 @@ function updateSubjectsTable(){
  }
 
 
+ function submitAdminDueDateEmail(){
+        $.ajax({
+          type:       "POST",
+          url:        "ajax_processing.php?action=updateAdminDueDateEmail",
+          cache:      false,
+          data:       { alertEmailAddressID: $('#editAlertEmailAddressID').val(), emailAddress: $('#emailAddress').val() },
+          success:    function(html) {
+                  updateDueDateTable();
+                  window.parent.tb_remove();
+          }
+       });
 
+ }
 
 
  function submitAdminAlertDays(){
@@ -318,6 +364,30 @@ function updateSubjectsTable(){
 	}
  }
 
+function submitAdminDueDateDays(){
+
+        numberOfDays = $('#daysInAdvanceNumber').val();
+
+        if (parseInt(numberOfDays) != numberOfDays-0){
+                $('#div_form_error').html("Number of days must be a number");
+                return false;
+        }else if ((numberOfDays < 1) || (numberOfDays > 365)){
+                $('#div_form_error').html("Number of days should be between 1 and 365");
+                return false;
+        }else{
+                $('#div_form_error').html("&nbsp;");
+                $.ajax({
+                  type:       "POST",
+                  url:        "ajax_processing.php?action=updateAdminDueDateDays",
+                  cache:      false,
+                  data:       { alertDaysInAdvanceID: $('#editAlertDaysInAdvanceID').val(), daysInAdvanceNumber: $('#daysInAdvanceNumber').val() },
+                  success:    function(html) {
+                          updateDueDateTable();
+                          window.parent.tb_remove();
+                  }
+               });
+        }
+ }
 
 
  function deleteData(className, deleteID){
@@ -489,6 +559,34 @@ function updateSubjectsTable(){
 
 	}
  }
+
+ function deleteDueDate(className, deleteID){
+
+        if (confirm("Do you really want to remove this due date setting?") == true) {
+
+               $.ajax({
+                  type:       "GET",
+                  url:        "ajax_processing.php",
+                  cache:      false,
+                  data:       "action=deleteInstance&class=" + className + "&id=" + deleteID,
+                  success:    function(html) {
+
+                        if (html){
+                                showError(html);
+
+                                // close the div in 3 secs
+                                setTimeout("emptyError();",3000);
+                        }else{
+                                updateDueDateTable();
+                                tb_reinit();
+                        }
+
+                  }
+              });
+
+        }
+ }
+
 
 
 

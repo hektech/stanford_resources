@@ -131,7 +131,7 @@ class Resource extends DatabaseObject {
 	//returns array of ResourcePayment objects
 	public function getResourcePayments(){
 
-		$query = "SELECT * FROM ResourcePayment WHERE resourceID = '" . $this->resourceID . "'";
+		$query = "SELECT * FROM ResourcePayment WHERE resourceID = '" . $this->resourceID . "' order by paymentYear";
 
 		$result = $this->db->processQuery($query, 'assoc');
 
@@ -882,6 +882,17 @@ class Resource extends DatabaseObject {
 		  $whereAdd[] = "R.resourceID = '" . mysql_real_escape_string($search['resourceID']) . "'";
 		  $searchDisplay[] = "Resource ID: " . $search['resourceID'];
 	  }
+
+                if ($search['orderNumber']) {
+                  $whereAdd[] = "R.orderNumber = '" . mysql_real_escape_string($search['orderNumber']) . "'";
+                  $searchDisplay[] = "Order Number: " . $search['orderNumber'];
+                }
+
+                if ($search['paymentYear']) {
+                  $whereAdd[] = "RPAY.paymentYear = '" . mysql_real_escape_string($search['paymentYear']) . "'";
+                  $searchDisplay[] = "Payment Year: " . $search['paymentYear'];
+                }
+
 		if ($search['resourceISBNOrISSN']) {
 		  $resourceISBNOrISSN = mysql_real_escape_string(str_replace("-","",$search['resourceISBNOrISSN']));
 		  $whereAdd[] = "REPLACE(R.isbnOrISSN,'-','') = '" . $resourceISBNOrISSN . "'";
@@ -892,6 +903,19 @@ class Resource extends DatabaseObject {
 		  $whereAdd[] = "REPLACE(RPAY.fundName,'-','') = '" . $fund . "'";
 		  $searchDisplay[] = "Fund: " . $search['fund'];
 	  }
+
+                if ($search['paymentDetail']) {
+                  $whereAdd[] = "RPAY.paymentDetail = '" . mysql_real_escape_string($search['paymentDetail']) . "'";
+                  $searchDisplay[] = "Payment Details: " . $search['paymentDetail'];
+                }
+
+
+                if ($search['orderTypeID']) {
+                  $whereAdd[] = "RPAY.orderTypeID = '" . mysql_real_escape_string($search['orderTypeID']) . "'";
+                  $orderType = new OrderType(new NamedArguments(array('primaryKey' => $search['orderTypeID'])));
+        $searchDisplay[] = "Payment Type: " . $orderType->shortName;
+          }
+
 
     if ($search['stepName']) {
       $status = new Status();
@@ -1260,7 +1284,7 @@ class Resource extends DatabaseObject {
 						R.createDate createDate, CONCAT_WS(' ', UU.firstName, UU.lastName) updateName,
 						R.updateDate updateDate, S.shortName status,
 						RT.shortName resourceType, RF.shortName resourceFormat, R.isbnOrISSN, R.orderNumber, R.systemNumber, R.resourceURL, R.resourceAltURL,
-						R.subscriptionStartDate, R.subscriptionEndDate, R.subscriptionAlertEnabledInd, AUT.shortName authenticationType,
+						R.subscriptionStartDate, R.subscriptionEndDate, R.subscriptionAlertEnabledInd, R.invoiceDate, R.invoiceAlertEnabledInd, AUT.shortName authenticationType,
 						AM.shortName accessMethod, SL.shortName storageLocation, UL.shortName userLimit, R.authenticationUserName, 
 						R.authenticationPassword, R.coverageText, CT.shortName catalogingType, CS.shortName catalogingStatus, R.recordSetIdentifier, R.bibSourceURL, 
 						R.numberRecordsAvailable, R.numberRecordsLoaded, R.hasOclcHoldings, 
@@ -1272,7 +1296,7 @@ class Resource extends DatabaseObject {
 						GROUP_CONCAT(DISTINCT ADS.shortName ORDER BY ADS.shortName DESC SEPARATOR '; ') administeringSites,
 						GROUP_CONCAT(DISTINCT RP.titleText ORDER BY RP.titleText DESC SEPARATOR '; ') parentResources,
 						GROUP_CONCAT(DISTINCT RC.titleText ORDER BY RC.titleText DESC SEPARATOR '; ') childResources,
-						GROUP_CONCAT(DISTINCT RPAY.fundName, ': ', ROUND(COALESCE(RPAY.paymentAmount, 0) / 100, 2), ' ', RPAY.currencyCode, ' ', OT.shortName ORDER BY RPAY.paymentAmount ASC SEPARATOR '; ') payments
+						GROUP_CONCAT(DISTINCT RPAY.paymentYear, ' ', RPAY.fundName, ': ', ROUND(COALESCE(RPAY.paymentAmount, 0) / 100, 2), ' ', RPAY.currencyCode, ' ', OT.shortName, ' ', RPAY.paymentDetail ORDER BY RPAY.paymentYear ASC SEPARATOR '; ') payments
 								FROM Resource R
 									LEFT JOIN Alias A ON R.resourceID = A.resourceID
 									LEFT JOIN ResourceOrganizationLink ROL ON R.resourceID = ROL.resourceID

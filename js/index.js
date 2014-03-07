@@ -34,6 +34,13 @@ $(document).ready(function(){
 	      }
 	});      
 	
+        //perform search if enter is hit
+        $('#searchOrderNumber').keyup(function(e) {
+              if(e.keyCode == 13) {
+                updateSearch();
+              }
+        });
+
 	//perform search if enter is hit
 	$('#searchResourceISBNOrISSN').keyup(function(e) {
 	      if(e.keyCode == 13) {
@@ -41,12 +48,26 @@ $(document).ready(function(){
 	      }
 	});     
 	
+        //perform search if enter is hit
+        $('#searchPaymentYear').keyup(function(e) {
+              if(e.keyCode == 13) {
+                updateSearch();
+              }
+        });
+
 	//perform search if enter is hit
 	$('#searchFund').keyup(function(e) {
 	      if(e.keyCode == 13) {
 		updateSearch();
 	      }
 	});   
+
+        //perform search if enter is hit
+        $('#searchPaymentDetail').keyup(function(e) {
+              if(e.keyCode == 13) {
+                updateSearch();
+              }
+        });
 	
 	//perform search if enter is hit
 	$('#searchResourceNote').keyup(function(e) {
@@ -208,12 +229,25 @@ function setNumberOfRecords(recordsPerPageNumber){
   $("#searchName").focus(function () {
   	$("#div_searchName").css({'display':'block'}); 
   });    
+  $("#searchOrderNumber").focus(function () {
+        $("#div_searchOrderNumber").css({'display':'block'});
+  });
+
+  $("#searchPaymentYear").focus(function () {
+        $("#div_searchPaymentYear").css({'display':'block'});
+  });
+
   $("#searchResourceISBNOrISSN").focus(function () {
   	$("#div_searchISBNOrISSN").css({'display':'block'}); 
   });  
   $("#searchFund").focus(function () {
   	$("#div_searchFund").css({'display':'block'}); 
   });  
+
+  $("#searchPaymentDetail").focus(function () {
+        $("#div_searchPaymentDetail").css({'display':'block'});
+  });
+
   $("#searchResourceNote").focus(function () {
   	$("#div_searchResourceNote").css({'display':'block'}); 
   });

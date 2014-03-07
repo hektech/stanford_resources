@@ -314,9 +314,9 @@ if ($resource->titleText){
 			foreach ($orgArray as $organization){
 				//if organizations is installed provide a link
 				if ($config->settings->organizationsModule == 'Y'){
-					echo "<span style='float:left; width:70px;'>" . $organization['organizationRole'] . ":</span><span style='width:270px;'>" . $organization['organization'] . "</span><br />";
+					echo "<span style='float:left; width:95px;'>" . $organization['organizationRole'] . ":</span><span style='width:270px;'>" . $organization['organization'] . "</span><br />";
 				}else{
-					echo "<span style='float:left; width:70px;'>" . $organization['organizationRole'] . ":</span><span style='width:270px;'>" . $organization['organization'] . "</span><br />";
+					echo "<span style='float:left; width:95px;'>" . $organization['organizationRole'] . ":</span><span style='width:270px;'>" . $organization['organization'] . "</span><br />";
 				}
 			}
 			?>
@@ -344,7 +344,7 @@ if ($resource->titleText){
 		
 		if ($resource->descriptionText){ ?>
 			<tr>
-			<td style='vertical-align:top;width:150px;'>Description:</td>
+			<td style='vertical-align:top;width:150px;'>Notes:</td>
 			<td><?php echo nl2br($resource->descriptionText); ?></td>
 			</tr>
 		<?php } ?>
@@ -469,12 +469,24 @@ if ($resource->titleText){
 	</tr>
 	<?php } ?>
 
+        <?php if (($resource->invoiceDate) && ($resource->invoiceDate != '0000-00-00')) { ?>
+        <tr>
+        <td style='vertical-align:top;width:150px;'>Invoice Date:</td>
+        <td><?php echo format_date($resource->invoiceDate); ?>&nbsp;&nbsp;
+        <?php if ($resource->invoiceAlertEnabledInd == "1") { echo "<i>Invoice Alert Enabled</i>"; } ?>
+        </td>
+
+        </tr>
+        <?php } ?>
+        </table>
+        <br />
+
 	</table>
 	<br />
 
 	<table class='linedFormTable' style='width:510px;'>
 	<tr>
-	<th colspan='3'>Initial Cost</th>
+	<th colspan='5'>Payments</th>
 	</th>
 	</tr>
 
@@ -482,9 +494,11 @@ if ($resource->titleText){
 	if (count($paymentArray) > 0){
 		foreach ($paymentArray as $payment){ ?>
 		<tr>
+                <td><?php echo $payment['paymentYear']; ?></td>
 		<td><?php echo $payment['fundName']; ?></td>
 		<td><?php echo $payment['currencyCode'] . " " . integer_to_cost($payment['paymentAmount']); ?></td>
 		<td><?php echo $payment['orderType']; ?></td>
+                <td><?php echo $payment['paymentDetail']; ?></td>
 		</tr>
 
 		<?php

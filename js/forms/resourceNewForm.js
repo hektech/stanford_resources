@@ -213,9 +213,11 @@
 
 	$(".addPayment").live('click', function () {
 
+                var pYr = $('.newPaymentTable').children().children().children().children('.paymentYear').val();
 		var fName = $('.newPaymentTable').children().children().children().children('.fundName').val();
 		var typeID = $('.newPaymentTable').children().children().children().children('.orderTypeID').val();
 		var pAmount = $('.newPaymentTable').children().children().children().children('.paymentAmount').val();
+                var pDetail = $('.newPaymentTable').children().children().children().children('.paymentDetail').val();
 
 						
 		if (((pAmount == '') || (pAmount == null)) && ((fName == '') || (fName == null))){
@@ -261,8 +263,10 @@
 			//next put the original clone back, we just need to reset the values
 			originalTR.appendTo('.newPaymentTable');
 			$('.newPaymentTable').children().children().children().children('.orderTypeID').val('');
+                        $('.newPaymentTable').children().children().children().children('.paymentYear').val('');
 			$('.newPaymentTable').children().children().children().children('.fundName').val('');
 			$('.newPaymentTable').children().children().children().children('.paymentAmount').val('');
+                        $('.newPaymentTable').children().children().children().children('.paymentDetail').val('');
 			
 
 			return false;
@@ -281,9 +285,11 @@
  	myReturn=0;
  	if (!validateRequired('titleText','<br />Title must be entered to continue.<br />')) myReturn="1";
 
+        var pYr = $('.newPaymentTable').children().children().children().children('.paymentYear').val();
 	var fName = $('.newPaymentTable').children().children().children().children('.fundName').val();
 	var typeID = $('.newPaymentTable').children().children().children().children('.orderTypeID').val();
 	var pAmount = $('.newPaymentTable').children().children().children().children('.paymentAmount').val();
+        var pDetail = $('.newPaymentTable').children().children().children().children('.paymentDetail').val();
 
 	//also perform same checks on the current record in case add button wasn't clicked
 	if ((((pAmount == '') || (pAmount == null)) && ((fName == '') || (fName == null))) && ((pAmount != '') || (fName != ''))){
@@ -320,6 +326,11 @@ function submitResource(status){
 	      orderTypeList += $(this).val() + ":::";
 	}); 
 
+        paymentYearList ='';
+        $(".paymentYear").each(function(id) {
+              paymentYearList += $(this).val() + ":::";
+        });
+
 	fundNameList ='';
 	$(".fundName").each(function(id) {
 	      fundNameList += $(this).val() + ":::";
@@ -337,7 +348,10 @@ function submitResource(status){
 	      currencyCodeList += $(this).val() + ":::";
 	}); 
 	
-
+        paymentDetailList ='';
+        $(".paymentDetail").each(function(id) {
+              paymentDetailList += $(this).val() + ":::";
+        });
 
 	if (validateNewResource() === true) {
 		$('.submitResource').attr("disabled", "disabled"); 
@@ -345,7 +359,7 @@ function submitResource(status){
 			 type:       "POST",
 			 url:        "ajax_processing.php?action=submitNewResource",
 			 cache:      false,
-			 data:       { resourceID: $("#editResourceID").val(), resourceTypeID: $("input:radio[name='resourceTypeID']:checked").val(), resourceFormatID: $("input:radio[name='resourceFormatID']:checked").val(), acquisitionTypeID: $("input:radio[name='acquisitionTypeID']:checked").val(), titleText: $("#titleText").val(), descriptionText: $("#descriptionText").val(), providerText: $("#providerText").val(), organizationID: $("#organizationID").val(), resourceURL: $("#resourceURL").val(), resourceAltURL: $("#resourceAltURL").val(), noteText: $("#noteText").val(), orderTypes: orderTypeList, fundNames: fundNameList, paymentAmounts: paymentAmountList, currencyCodes: currencyCodeList, resourceStatus: status },
+			 data:       { resourceID: $("#editResourceID").val(), resourceTypeID: $("input:radio[name='resourceTypeID']:checked").val(), resourceFormatID: $("input:radio[name='resourceFormatID']:checked").val(), acquisitionTypeID: $("input:radio[name='acquisitionTypeID']:checked").val(), titleText: $("#titleText").val(), descriptionText: $("#descriptionText").val(), providerText: $("#providerText").val(), organizationID: $("#organizationID").val(), resourceURL: $("#resourceURL").val(), resourceAltURL: $("#resourceAltURL").val(), noteText: $("#noteText").val(), orderTypes: orderTypeList, paymentYears: paymentYearList, fundNames: fundNameList, paymentAmounts: paymentAmountList, currencyCodes: currencyCodeList, paymentDetails: paymentDetailList, resourceStatus: status },
 			 success:    function(resourceID) {
 				//go to the new resource page if this was submitted
 				if (status == 'progress'){

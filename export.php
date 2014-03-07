@@ -72,7 +72,7 @@ $columnHeaders = array(
   "Parent Record",
   "Child Record",
   "Acquisition Type",
-  "Initial Cost",
+  "Payments",
   "Order Number",
   "System Number",
   "Purchasing Sites",

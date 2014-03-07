@@ -172,12 +172,16 @@ switch ($_GET['action']) {
 
 			$orderTypeArray = array();
 			$orderTypeArray = explode(':::',$_POST['orderTypes']);
+                        $paymentYearArray = array();
+                        $paymentYearArray = explode(':::',$_POST['paymentYears']);
 			$fundNameArray = array();
 			$fundNameArray = explode(':::',$_POST['fundNames']);
 			$paymentAmountArray = array();
 			$paymentAmountArray = explode(':::',$_POST['paymentAmounts']);
 			$currencyCodeArray = array();
 			$currencyCodeArray = explode(':::',$_POST['currencyCodes']);
+                        $paymentDetailArray = array();
+                        $paymentDetailArray = explode(':::',$_POST['paymentDetails']);
 
 			//first remove all payment records, then we'll add them back
 			$resource->removeResourcePayments();
@@ -187,9 +191,11 @@ switch ($_GET['action']) {
 					$resourcePayment = new ResourcePayment();
 					$resourcePayment->resourceID = $resourceID;
 					$resourcePayment->orderTypeID = $value;
+					$resourcePayment->paymentYear = $paymentYearArray[$key];
 					$resourcePayment->fundName = $fundNameArray[$key];
 					$resourcePayment->currencyCode = $currencyCodeArray[$key];
 					$resourcePayment->paymentAmount = cost_to_integer($paymentAmountArray[$key]);
+                                        $resourcePayment->paymentDetail = $paymentDetailArray[$key];
 
 					try {
 						$resourcePayment->save();
@@ -362,10 +368,18 @@ switch ($_GET['action']) {
 			$resource->subscriptionEndDate= 'null';
 		}
 
+                //first set invoice Date for proper saving
+                if ((isset($_POST['invoiceDate'])) && ($_POST['invoiceDate'] != '')){
+                        $resource->invoiceDate = date("Y-m-d", strtotime($_POST['invoiceDate']));
+                }else{
+                        $resource->invoiceDate= 'null';
+                }
+
 		$resource->acquisitionTypeID 				= $_POST['acquisitionTypeID'];
 		$resource->orderNumber 						= $_POST['orderNumber'];
 		$resource->systemNumber 					= $_POST['systemNumber'];
 		$resource->subscriptionAlertEnabledInd 		= $_POST['subscriptionAlertEnabledInd'];
+                $resource->invoiceAlertEnabledInd          = $_POST['invoiceAlertEnabledInd'];
 
 
 
@@ -393,21 +407,27 @@ switch ($_GET['action']) {
 
 			$orderTypeArray = array();
 			$orderTypeArray = explode(':::',$_POST['orderTypes']);
+                        $paymentYearArray = array();
+                        $paymentYearArray = explode(':::',$_POST['paymentYears']);
 			$fundNameArray = array();
 			$fundNameArray = explode(':::',$_POST['fundNames']);
 			$paymentAmountArray = array();
 			$paymentAmountArray = explode(':::',$_POST['paymentAmounts']);
 			$currencyCodeArray = array();
 			$currencyCodeArray = explode(':::',$_POST['currencyCodes']);
+                        $paymentDetailArray = array();
+                        $paymentDetailArray = explode(':::',$_POST['paymentDetails']);
 
 			foreach ($orderTypeArray as $key => $value){
 				if (($value) && (($paymentAmountArray[$key]) || ($fundNameArray[$key]))){
 					$resourcePayment = new ResourcePayment();
 					$resourcePayment->resourceID = $resourceID;
 					$resourcePayment->orderTypeID = $value;
+                                        $resourcePayment->paymentYear = $paymentYearArray[$key];
 					$resourcePayment->fundName = $fundNameArray[$key];
 					$resourcePayment->currencyCode = $currencyCodeArray[$key];
 					$resourcePayment->paymentAmount = cost_to_integer($paymentAmountArray[$key]);
+                                        $resourcePayment->paymentDetail = $paymentDetailArray[$key];
 
 					try {
 						$resourcePayment->save();
@@ -835,6 +855,27 @@ switch ($_GET['action']) {
  		break;
 
 
+     case 'updateAdminDueDateEmail':
+                $alertEmailAddressID = $_POST['alertEmailAddressID'];
+                $emailAddress = $_POST['emailAddress'];
+
+                if ($alertEmailAddressID != ''){
+                        $instance = new AlertEmailAddress(new NamedArguments(array('primaryKey' => $alertEmailAddressID)));
+                }else{
+                        $instance = new AlertEmailAddress();
+                }
+
+                $instance->emailAddress = $emailAddress;
+
+                try {
+                        $instance->save();
+                } catch (Exception $e) {
+                        echo $e->getMessage();
+                }
+
+                break;
+
+
 
 
      case 'updateAdminAlertDays':
@@ -856,6 +897,27 @@ switch ($_GET['action']) {
 		}
 
  		break;
+
+
+     case 'updateAdminDueDateDays':
+                $alertDaysInAdvanceID = $_POST['alertDaysInAdvanceID'];
+                $daysInAdvanceNumber = $_POST['daysInAdvanceNumber'];
+
+                if ($alertDaysInAdvanceID != ''){
+                        $instance = new AlertDaysInAdvance(new NamedArguments(array('primaryKey' => $alertDaysInAdvanceID)));
+                }else{
+                        $instance = new AlertDaysInAdvance();
+                }
+
+                $instance->daysInAdvanceNumber = $daysInAdvanceNumber;
+
+                try {
+                        $instance->save();
+                } catch (Exception $e) {
+                        echo $e->getMessage();
+                }
+
+                break;
 
 
 
