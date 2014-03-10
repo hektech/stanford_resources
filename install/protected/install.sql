@@ -273,7 +273,9 @@ CREATE TABLE  `_DATABASE_NAME_`.`Resource` (
   `systemNumber` varchar(45) default NULL,
   `subscriptionStartDate` date default NULL,
   `subscriptionEndDate` date default NULL,
+  `invoiceDate` date default NULL,
   `subscriptionAlertEnabledInd` int(10) unsigned default NULL,
+  `invoiceAlertEnabledInd` int(10) unsigned default NULL,
   `userLimitID` int(11) default NULL,
   `resourceURL` varchar(2000) default NULL,
   `authenticationUserName` varchar(200) default NULL,
@@ -396,6 +398,8 @@ CREATE TABLE  `_DATABASE_NAME_`.`ResourcePayment` (
   `paymentAmount` int(10) unsigned default NULL,
   `orderTypeID` int(10) unsigned default NULL,
   `currencyCode` varchar(3) NOT NULL,
+  `paymentYear` varchar(200) default NULL,
+  `paymentDetail` varchar(200) default NULL,
   PRIMARY KEY  (`resourcePaymentID`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
